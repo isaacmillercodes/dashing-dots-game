@@ -7,11 +7,13 @@ public class GameManager : MonoBehaviour {
 
 	public static GameManager instance = null;
 	public BoardManager boardScript;
-	public int moveCount = 0;
-	[HideInInspector] public int playerLevelMoves = 0;
-	[HideInInspector] public int playerTotalMoves = 0;
+	public int movesAvailable = 50;
+	public int levelMoves;
+	public int totalMoves;
+	public int totalScore = 0;
+	public int bonusMoves = 25;
 
-//	private int level = 1;
+	private int level = 1;
 
 	void Awake () 
 	{
@@ -33,13 +35,15 @@ public class GameManager : MonoBehaviour {
 
 	private void OnLevelWasLoaded (int index) 
 	{
-//		level++;
+		level++;
+		levelMoves = 0;
 		InitGame();
 	}
 
 
 	public void GameOver () 
-	{
+	{	
+		totalScore = totalMoves * level;
 		enabled = false;
 	}
 

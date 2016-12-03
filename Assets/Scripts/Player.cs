@@ -6,10 +6,15 @@ public class Player : MonoBehaviour {
 
 	public bool activePlayer = false;
 	public bool ignoreInput = false;
+	public bool lastInput;
 	public float acceleration;
+	public int levelMoves;
+//	public int totalMoves;
+	public int movesAvailable;
+//	public int totalScore = 0;
+//	public int bonusMoves;
 
 	private Vector3 currentDirection = Vector3.zero;
-
 	private Rigidbody2D body;
 	private float speed;
 
@@ -17,10 +22,17 @@ public class Player : MonoBehaviour {
 	{
 		body = GetComponent<Rigidbody2D>();
 		body.constraints = RigidbodyConstraints2D.FreezeAll;
+		movesAvailable = GameManager.instance.movesAvailable;
+		levelMoves = GameManager.instance.levelMoves;
+//		totalMoves = GameManager.instance.totalMoves;
+//		movesAvailable = GameManager.instance.movesAvailable;
+//		levelMoves = 0;
+//		bonusMoves = 25;
 	}
 
 	private void Update() 
 	{
+		lastInput = ignoreInput;
 		speed = body.velocity.magnitude;
 
 		if (speed < 0.5) 
@@ -81,6 +93,12 @@ public class Player : MonoBehaviour {
 				currentDirection = Vector3.zero;
 			}
 		}
+
+		if (!ignoreInput && lastInput) 
+		{
+			movesAvailable--;
+			levelMoves++;
+		}
 	}
 
 	private void OnTriggerEnter2D	 (Collider2D other) 
@@ -101,7 +119,17 @@ public class Player : MonoBehaviour {
 		{
 			token.SetActive(false);
 			Restart ();
+//			movesAvailable += (bonusMoves / levelMoves);
+//			totalScore += (1000 / levelMoves);
 			enabled = false;
+		}
+	}
+
+	private void CheckIfGameOver () {
+		if (movesAvailable <= 0) {
+//			SoundManager.instance.PlaySingle (gameOverSound);
+//			SoundManager.instance.musicSource.Stop ();
+			GameManager.instance.GameOver ();
 		}
 	}
 
