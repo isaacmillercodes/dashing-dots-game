@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -10,10 +10,13 @@ public class GameManager : MonoBehaviour {
 	public int movesAvailable = 50;
 	public int levelMoves;
 	public int totalMoves;
+	public int levelScore = 500;
 	public int totalScore = 0;
-	public int bonusMoves = 25;
+	public int bonusMoves = 15;
 
 	private int level = 1;
+	private Text movesAvailableText;
+
 
 	void Awake () 
 	{
@@ -30,20 +33,28 @@ public class GameManager : MonoBehaviour {
 
 	public void InitGame() 
 	{
+//		levelImage = GameObject.Find("LevelImage");
+
+		//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
+		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
+
+		//Set the text of levelText to the string "Day" and append the current level number.
+		movesAvailableText.text = "Moves Remaining: " + movesAvailable;
 		boardScript.SetupScene ();
 	}
 
 	private void OnLevelWasLoaded (int index) 
 	{
-		level++;
+		totalScore += ((levelScore / levelMoves) + (totalMoves / level));
+		movesAvailable += (bonusMoves / levelMoves);
 		levelMoves = 0;
+		level++;
 		InitGame();
 	}
 
 
 	public void GameOver () 
 	{	
-		totalScore = totalMoves * level;
 		enabled = false;
 	}
 

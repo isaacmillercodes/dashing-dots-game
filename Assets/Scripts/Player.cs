@@ -1,48 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour {
 
 	public bool activePlayer = false;
 	public bool ignoreInput = false;
 	public bool lastInput;
-	public float acceleration;
-	public int levelMoves;
+	private float acceleration = 25;
+//	public int levelMoves;
 //	public int totalMoves;
-	public int movesAvailable;
+//	public int movesAvailable;
 //	public int totalScore = 0;
 //	public int bonusMoves;
+	public int count;
 
-	private Vector3 currentDirection = Vector3.zero;
+	private Vector2 currentDirection = Vector2.zero;
 	private Rigidbody2D body;
 	private float speed;
+	private Text movesAvailableText;
 
 	void Start() 
 	{
 		body = GetComponent<Rigidbody2D>();
 		body.constraints = RigidbodyConstraints2D.FreezeAll;
-		movesAvailable = GameManager.instance.movesAvailable;
-		levelMoves = GameManager.instance.levelMoves;
+//		movesAvailable = GameManager.instance.movesAvailable;
+//		levelMoves = GameManager.instance.levelMoves;
 //		totalMoves = GameManager.instance.totalMoves;
 //		movesAvailable = GameManager.instance.movesAvailable;
 //		levelMoves = 0;
 //		bonusMoves = 25;
 	}
 
-	private void Update() 
-	{
+	private void FixedUpdate() 
+	{	
+		//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
+		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
+
+		//Set the text of levelText to the string "Day" and append the current level number.
+		movesAvailableText.text = "Moves Remaining: " + GameManager.instance.movesAvailable;
+
 		lastInput = ignoreInput;
 		speed = body.velocity.magnitude;
 
+//		Debug.Log ("Update Speed: " + speed);
 		if (speed < 0.5) 
 		{
-			this.body.velocity = new Vector3(0, 0, 0);
-			this.ignoreInput = false;
+//			count++;
+//			Debug.Log ("Stop" + count);
+			body.velocity = new Vector2(0, 0);
+			ignoreInput = false;
 
-			if (!this.activePlayer) 
+			if (!activePlayer)
 			{
-				this.body.constraints = RigidbodyConstraints2D.FreezeAll;
+				body.constraints = RigidbodyConstraints2D.FreezeAll;
 			}
 		}
 
@@ -50,6 +62,8 @@ public class Player : MonoBehaviour {
 		{
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Collider2D hitCollider = Physics2D.OverlapPoint(mousePosition);
+
+//			Debug.Log ("Click: " + mousePosition);
 
 			if (hitCollider) 
 			{   
@@ -73,7 +87,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if (currentDirection.Equals(Vector3.zero)) 
+		if (currentDirection.Equals(Vector2.zero)) 
 		{
 			int horizontal = (int)(Input.GetAxisRaw ("Horizontal"));
 			int vertical = (int)(Input.GetAxisRaw ("Vertical"));
@@ -83,25 +97,53 @@ public class Player : MonoBehaviour {
 				vertical = 0;
 			}
 
-			Vector3 inputDirection = new Vector3(horizontal, vertical, 0);
+			Vector2 inputDirection = new Vector2 (horizontal, vertical);
 
-			if (!inputDirection.Equals(Vector3.zero) && activePlayer && !ignoreInput) 
+
+//			if (!inputDirection.Equals (Vector2.zero) && activePlayer && !ignoreInput)
+//			{
+//				currentDirection = inputDirection;
+////				Vector2 destination = ;
+//				ignoreInput = true;
+//				body.AddForce (currentDirection * acceleration);
+////				body.MovePosition(destination * Time.fixedDeltaTime);
+//				currentDirection = Vector2.zero;
+//			}
+
+
+//			Vector2 rayDirection = new Vector2(horizontal, vertical);
+//
+//			RaycastHit2D hit = Physics2D.Raycast(body.position, rayDirection);
+//
+//			//If something was hit.
+//			if ( hit.collider != null )
+//			{
+//				//Display the point in world space where the ray hit the collider's surface.
+//				Debug.Log ("Hit: " + hit.point);
+//			}
+
+//			Vector3 inputDirection = new Vector3(horizontal, vertical, 0);
+//
+			if (!inputDirection.Equals(Vector2.zero) && activePlayer && !ignoreInput) 
 			{
 				currentDirection = inputDirection;
 				ignoreInput = true;
-				this.body.velocity = currentDirection * acceleration;
-				currentDirection = Vector3.zero;
+				body.velocity = currentDirection * acceleration;
+				currentDirection = Vector2.zero;
 			}
 		}
 
-		if (!ignoreInput && lastInput) 
+		if (ignoreInput && !lastInput && (speed < 0.01)) 
 		{
-			movesAvailable--;
-			levelMoves++;
+			GameManager.instance.movesAvailable--;
+			GameManager.instance.levelMoves++;
+//			this.body.constraints = RigidbodyConstraints2D.FreezeAll;
 		}
+
+		CheckIfGameOver ();
 	}
 
-	private void OnTriggerEnter2D	 (Collider2D other) 
+	private void OnTriggerEnter2D (Collider2D other) 
 	{
 		if (other.tag == "Token") 
 		{
@@ -112,6 +154,15 @@ public class Player : MonoBehaviour {
 		}
 				
 	}
+
+//	private void OnCollisionEnter2D (Collision2D other)
+//	{	
+//		if (other.gameObject.tag == "Player") 
+//		{
+//			body.constraints = RigidbodyConstraints2D.FreezeAll;
+//		}
+//	}
+//		
 
 	private void grabToken (string color, string name1, string name2, GameObject token)
 	{
@@ -126,7 +177,7 @@ public class Player : MonoBehaviour {
 	}
 
 	private void CheckIfGameOver () {
-		if (movesAvailable <= 0) {
+		if (GameManager.instance.movesAvailable <= 0) {
 //			SoundManager.instance.PlaySingle (gameOverSound);
 //			SoundManager.instance.musicSource.Stop ();
 			GameManager.instance.GameOver ();
