@@ -8,13 +8,19 @@ public class Player : MonoBehaviour {
 	public bool activePlayer = false;
 	public bool ignoreInput = false;
 	public bool lastInput;
+	public Sprite sprite1; 
+	public Sprite sprite2;
+
+
 	private float acceleration = 25;
+	private SpriteRenderer spriteRenderer;
+
 //	public int levelMoves;
 //	public int totalMoves;
 //	public int movesAvailable;
 //	public int totalScore = 0;
 //	public int bonusMoves;
-	public int count;
+//	public int count;
 
 	private Vector2 currentDirection = Vector2.zero;
 	private Rigidbody2D body;
@@ -25,6 +31,12 @@ public class Player : MonoBehaviour {
 	{
 		body = GetComponent<Rigidbody2D>();
 		body.constraints = RigidbodyConstraints2D.FreezeAll;
+
+		spriteRenderer = GetComponent<SpriteRenderer>();
+//		if (spriteRenderer.sprite == null)
+//			spriteRenderer.sprite = sprite1;
+
+
 //		movesAvailable = GameManager.instance.movesAvailable;
 //		levelMoves = GameManager.instance.levelMoves;
 //		totalMoves = GameManager.instance.totalMoves;
@@ -43,7 +55,7 @@ public class Player : MonoBehaviour {
 		speed = body.velocity.magnitude;
 
 //		Debug.Log ("Update Speed: " + speed);
-		if (speed < .50) 
+		if (speed < .5) 
 		{
 //			count++;
 //			Debug.Log ("Stop" + count);
@@ -80,6 +92,7 @@ public class Player : MonoBehaviour {
 					thisPlayer.activePlayer = true;
 					thisPlayer.body.constraints = RigidbodyConstraints2D.None;
 					thisPlayer.body.constraints = RigidbodyConstraints2D.FreezeRotation;
+
 
 				} 
 			}
@@ -139,6 +152,7 @@ public class Player : MonoBehaviour {
 		}
 
 		CheckIfGameOver ();
+		CheckSprite ();
 	}
 
 	private void OnTriggerEnter2D (Collider2D other) 
@@ -171,6 +185,18 @@ public class Player : MonoBehaviour {
 //			movesAvailable += (bonusMoves / levelMoves);
 //			totalScore += (1000 / levelMoves);
 			enabled = false;
+		}
+	}
+
+	void CheckSprite ()
+	{
+		if (activePlayer)
+		{
+			spriteRenderer.sprite = sprite2;
+		}
+		else
+		{
+			spriteRenderer.sprite = sprite1;
 		}
 	}
 
