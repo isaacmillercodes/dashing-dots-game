@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour {
 
 	private int level = 1;
 	private Text movesAvailableText;
+	private Text scoreText;
 
 
 	void Awake () 

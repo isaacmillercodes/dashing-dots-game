@@ -26,6 +26,7 @@ public class Player : MonoBehaviour {
 	private Rigidbody2D body;
 	private float speed;
 	private Text movesAvailableText;
+	private Text scoreText;
 
 	void Start() 
 	{
@@ -48,8 +49,10 @@ public class Player : MonoBehaviour {
 	private void FixedUpdate() 
 	{	
 		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
+		scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
 
 		movesAvailableText.text = "Moves Remaining: " + GameManager.instance.movesAvailable;
+		scoreText.text = "Score: " + GameManager.instance.totalScore;
 
 		lastInput = ignoreInput;
 		speed = body.velocity.magnitude;
