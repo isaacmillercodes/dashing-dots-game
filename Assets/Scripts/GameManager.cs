@@ -35,11 +35,11 @@ public class GameManager : MonoBehaviour {
 	{
 //		levelImage = GameObject.Find("LevelImage");
 
-		//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
-		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
-
-		//Set the text of levelText to the string "Day" and append the current level number.
-		movesAvailableText.text = "Moves Remaining: " + movesAvailable;
+//		//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
+//		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
+//
+//		//Set the text of levelText to the string "Day" and append the current level number.
+//		movesAvailableText.text = "Moves Remaining: " + movesAvailable;
 		boardScript.SetupScene ();
 	}
 
@@ -55,7 +55,10 @@ public class GameManager : MonoBehaviour {
 
 	public void GameOver () 
 	{	
-		enabled = false;
+		if (movesAvailable <= 0) 
+		{
+			enabled = false;
+		}
 	}
 
 }

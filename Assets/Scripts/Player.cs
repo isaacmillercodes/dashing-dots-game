@@ -35,17 +35,15 @@ public class Player : MonoBehaviour {
 
 	private void FixedUpdate() 
 	{	
-		//Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
 		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
 
-		//Set the text of levelText to the string "Day" and append the current level number.
 		movesAvailableText.text = "Moves Remaining: " + GameManager.instance.movesAvailable;
 
 		lastInput = ignoreInput;
 		speed = body.velocity.magnitude;
 
 //		Debug.Log ("Update Speed: " + speed);
-		if (speed < 0.5) 
+		if (speed < .50) 
 		{
 //			count++;
 //			Debug.Log ("Stop" + count);
@@ -133,7 +131,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if (ignoreInput && !lastInput && (speed < 0.01)) 
+		if (ignoreInput && !lastInput && (speed < 0.5)) 
 		{
 			GameManager.instance.movesAvailable--;
 			GameManager.instance.levelMoves++;
