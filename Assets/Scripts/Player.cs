@@ -8,7 +8,7 @@ public class Player : MonoBehaviour {
 	public bool activePlayer = false;
 	public bool ignoreInput = false;
 	public bool lastInput;
-	public Sprite sprite1; 
+	public Sprite sprite1;
 	public Sprite sprite2;
 
 
@@ -28,7 +28,7 @@ public class Player : MonoBehaviour {
 	private Text movesAvailableText;
 	private Text scoreText;
 
-	void Start() 
+	void Start()
 	{
 		body = GetComponent<Rigidbody2D>();
 		body.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -46,11 +46,11 @@ public class Player : MonoBehaviour {
 //		bonusMoves = 25;
 	}
 
-	private void FixedUpdate() 
-	{	
+	private void FixedUpdate()
+	{
 		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
 		scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
-
+		Debug.Log (GameManager.instance.movesAvailable);
 		movesAvailableText.text = "Moves Remaining: " + GameManager.instance.movesAvailable;
 		scoreText.text = "Score: " + GameManager.instance.totalScore;
 
@@ -58,7 +58,7 @@ public class Player : MonoBehaviour {
 		speed = body.velocity.magnitude;
 
 //		Debug.Log ("Update Speed: " + speed);
-		if (speed < .5) 
+		if (speed < .5)
 		{
 //			count++;
 //			Debug.Log ("Stop" + count);
@@ -71,23 +71,23 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetMouseButtonDown(0)) 
+		if (Input.GetMouseButtonDown(0))
 		{
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Collider2D hitCollider = Physics2D.OverlapPoint(mousePosition);
 
 //			Debug.Log ("Click: " + mousePosition);
 
-			if (hitCollider) 
-			{   
-				if (hitCollider.gameObject.tag == "Player") 
+			if (hitCollider)
+			{
+				if (hitCollider.gameObject.tag == "Player")
 				{
 
 					Player thisPlayer = hitCollider.gameObject.GetComponent<Player>();
 
 					Player[] players = GetComponents<Player> ();
 
-					foreach (Player player in players) 
+					foreach (Player player in players)
 					{
 						player.activePlayer = false;
 					}
@@ -97,16 +97,16 @@ public class Player : MonoBehaviour {
 					thisPlayer.body.constraints = RigidbodyConstraints2D.FreezeRotation;
 
 
-				} 
+				}
 			}
 		}
 
-		if (currentDirection.Equals(Vector2.zero)) 
+		if (currentDirection.Equals(Vector2.zero))
 		{
 			int horizontal = (int)(Input.GetAxisRaw ("Horizontal"));
 			int vertical = (int)(Input.GetAxisRaw ("Vertical"));
 
-			if (horizontal != 0) 
+			if (horizontal != 0)
 			{
 				vertical = 0;
 			}
@@ -138,7 +138,7 @@ public class Player : MonoBehaviour {
 
 //			Vector3 inputDirection = new Vector3(horizontal, vertical, 0);
 //
-			if (!inputDirection.Equals(Vector2.zero) && activePlayer && !ignoreInput) 
+			if (!inputDirection.Equals(Vector2.zero) && activePlayer && !ignoreInput)
 			{
 				currentDirection = inputDirection;
 				ignoreInput = true;
@@ -147,7 +147,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 
-		if (ignoreInput && !lastInput && (speed < 0.5)) 
+		if (ignoreInput && !lastInput && (speed < 0.5))
 		{
 			GameManager.instance.movesAvailable--;
 			GameManager.instance.levelMoves++;
@@ -158,26 +158,26 @@ public class Player : MonoBehaviour {
 		CheckSprite ();
 	}
 
-	private void OnTriggerEnter2D (Collider2D other) 
+	private void OnTriggerEnter2D (Collider2D other)
 	{
-		if (other.tag == "Token") 
+		if (other.tag == "Token")
 		{
 			grabToken ("Beige", this.name, other.name, other.gameObject);
 			grabToken ("Green", this.name, other.name, other.gameObject);
 			grabToken ("Yellow", this.name, other.name, other.gameObject);
 			grabToken ("Pink", this.name, other.name, other.gameObject);
 		}
-				
+
 	}
 
 //	private void OnCollisionEnter2D (Collision2D other)
-//	{	
-//		if (other.gameObject.tag == "Player") 
+//	{
+//		if (other.gameObject.tag == "Player")
 //		{
 //			body.constraints = RigidbodyConstraints2D.FreezeAll;
 //		}
 //	}
-//		
+//
 
 	private void grabToken (string color, string name1, string name2, GameObject token)
 	{
@@ -204,14 +204,16 @@ public class Player : MonoBehaviour {
 	}
 
 	private void CheckIfGameOver () {
-		if (GameManager.instance.movesAvailable <= 0) {
+//		if (GameManager.instance.movesAvailable <= 0)
+//		{
 //			SoundManager.instance.PlaySingle (gameOverSound);
 //			SoundManager.instance.musicSource.Stop ();
-			GameManager.instance.GameOver ();
-		}
+			// GameManager.instance = null;
+//		}
+		GameManager.instance.GameOver();
 	}
 
-	private void Restart () 
+	private void Restart ()
 	{
 		SceneManager.LoadScene (0);
 	}
