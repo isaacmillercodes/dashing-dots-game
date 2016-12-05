@@ -37,11 +37,15 @@ public class Player : MonoBehaviour {
 	}
 
 	private void FixedUpdate()
-	{
-		movesAvailableText.text = "Moves Remaining       " + GameManager.instance.movesAvailable;
-		scoreText.text = "Total Score      " + GameManager.instance.totalScore;
-		avgMovesText.text = "Average Level Moves " + GameManager.instance.movesPerLevel;
-		levelMovesText.text = "Moves This Level              " + GameManager.instance.levelMoves;
+	{	
+		if (GameManager.instance) 
+		{
+			movesAvailableText.text = "Moves Remaining       " + GameManager.instance.movesAvailable;
+			scoreText.text = "Total Score      " + GameManager.instance.totalScore;
+			avgMovesText.text = "Average Level Moves " + GameManager.instance.movesPerLevel;
+			levelMovesText.text = "Moves This Level              " + GameManager.instance.levelMoves;
+			GameManager.instance.CheckIfGameOver();
+		}
 
 
 
@@ -119,7 +123,7 @@ public class Player : MonoBehaviour {
 
 		}
 
-		CheckIfGameOver ();
+//		CheckIfGameOver ();
 		CheckSprite ();
 	}
 
@@ -158,9 +162,10 @@ public class Player : MonoBehaviour {
 		}
 	}
 
-	private void CheckIfGameOver () {
-		GameManager.instance.GameOver();
-	}
+//	private void CheckIfGameOver () {
+//		
+//		GameManager.instance.GameOver();
+//	}
 
 	private void Restart ()
 	{

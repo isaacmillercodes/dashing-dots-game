@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
 		if (level > 1) 
 		{
 			totalScore += ((levelScore / levelMoves) + (totalMoves / level));
+			movesAvailable += (bonusMoves / levelMoves);
 			levelMoves = 0;
 		}
 		level++;
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 	}
 
-	public void GameOver ()
+	public void CheckIfGameOver ()
 	{
 		if (movesAvailable <= 0)
 		{
