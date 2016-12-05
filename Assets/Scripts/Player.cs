@@ -14,19 +14,14 @@ public class Player : MonoBehaviour {
 
 	private float acceleration = 25;
 	private SpriteRenderer spriteRenderer;
-
-//	public int levelMoves;
-//	public int totalMoves;
-//	public int movesAvailable;
-//	public int totalScore = 0;
-//	public int bonusMoves;
-//	public int count;
-
 	private Vector2 currentDirection = Vector2.zero;
 	private Rigidbody2D body;
 	private float speed;
 	private Text movesAvailableText;
 	private Text scoreText;
+	private Text avgMovesText;
+	private Text levelMovesText;
+
 
 	void Start()
 	{
@@ -34,34 +29,28 @@ public class Player : MonoBehaviour {
 		body.constraints = RigidbodyConstraints2D.FreezeAll;
 
 		spriteRenderer = GetComponent<SpriteRenderer>();
-//		if (spriteRenderer.sprite == null)
-//			spriteRenderer.sprite = sprite1;
 
-
-//		movesAvailable = GameManager.instance.movesAvailable;
-//		levelMoves = GameManager.instance.levelMoves;
-//		totalMoves = GameManager.instance.totalMoves;
-//		movesAvailable = GameManager.instance.movesAvailable;
-//		levelMoves = 0;
-//		bonusMoves = 25;
+		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
+		scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
+		avgMovesText = GameObject.Find("AverageMovesText").GetComponent<Text>();
+		levelMovesText = GameObject.Find("LevelMovesText").GetComponent<Text>();
 	}
 
 	private void FixedUpdate()
 	{
-		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
-		scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
-//		Debug.Log (GameManager.instance.movesAvailable);
-		movesAvailableText.text = "Moves Remaining: " + GameManager.instance.movesAvailable;
-		scoreText.text = "Score: " + GameManager.instance.totalScore;
+		movesAvailableText.text = "Moves Remaining       " + GameManager.instance.movesAvailable;
+		scoreText.text = "Total Score      " + GameManager.instance.totalScore;
+		avgMovesText.text = "Average Level Moves " + GameManager.instance.movesPerLevel;
+		levelMovesText.text = "Moves This Level              " + GameManager.instance.levelMoves;
+
+
+
 
 		lastInput = ignoreInput;
 		speed = body.velocity.magnitude;
 
-//		Debug.Log ("Update Speed: " + speed);
 		if (speed < .5)
 		{
-//			count++;
-//			Debug.Log ("Stop" + count);
 			body.velocity = new Vector2(0, 0);
 			ignoreInput = false;
 
@@ -75,8 +64,6 @@ public class Player : MonoBehaviour {
 		{
 			Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 			Collider2D hitCollider = Physics2D.OverlapPoint(mousePosition);
-
-//			Debug.Log ("Click: " + mousePosition);
 
 			if (hitCollider)
 			{
@@ -113,31 +100,6 @@ public class Player : MonoBehaviour {
 
 			Vector2 inputDirection = new Vector2 (horizontal, vertical);
 
-
-//			if (!inputDirection.Equals (Vector2.zero) && activePlayer && !ignoreInput)
-//			{
-//				currentDirection = inputDirection;
-////				Vector2 destination = ;
-//				ignoreInput = true;
-//				body.AddForce (currentDirection * acceleration);
-////				body.MovePosition(destination * Time.fixedDeltaTime);
-//				currentDirection = Vector2.zero;
-//			}
-
-
-//			Vector2 rayDirection = new Vector2(horizontal, vertical);
-//
-//			RaycastHit2D hit = Physics2D.Raycast(body.position, rayDirection);
-//
-//			//If something was hit.
-//			if ( hit.collider != null )
-//			{
-//				//Display the point in world space where the ray hit the collider's surface.
-//				Debug.Log ("Hit: " + hit.point);
-//			}
-
-//			Vector3 inputDirection = new Vector3(horizontal, vertical, 0);
-//
 			if (!inputDirection.Equals(Vector2.zero) && activePlayer && !ignoreInput)
 			{
 				currentDirection = inputDirection;
@@ -151,7 +113,10 @@ public class Player : MonoBehaviour {
 		{
 			GameManager.instance.movesAvailable--;
 			GameManager.instance.levelMoves++;
-//			this.body.constraints = RigidbodyConstraints2D.FreezeAll;
+			GameManager.instance.totalMoves++;
+			GameManager.instance.movesPerLevel = GameManager.instance.totalMoves / GameManager.instance.level;
+
+
 		}
 
 		CheckIfGameOver ();
@@ -169,15 +134,7 @@ public class Player : MonoBehaviour {
 		}
 
 	}
-
-//	private void OnCollisionEnter2D (Collision2D other)
-//	{
-//		if (other.gameObject.tag == "Player")
-//		{
-//			body.constraints = RigidbodyConstraints2D.FreezeAll;
-//		}
-//	}
-//
+		
 
 	private void grabToken (string color, string name1, string name2, GameObject token)
 	{
@@ -185,8 +142,6 @@ public class Player : MonoBehaviour {
 		{
 			token.SetActive(false);
 			Restart ();
-//			movesAvailable += (bonusMoves / levelMoves);
-//			totalScore += (1000 / levelMoves);
 			enabled = false;
 		}
 	}
@@ -204,18 +159,12 @@ public class Player : MonoBehaviour {
 	}
 
 	private void CheckIfGameOver () {
-//		if (GameManager.instance.movesAvailable <= 0)
-//		{
-//			SoundManager.instance.PlaySingle (gameOverSound);
-//			SoundManager.instance.musicSource.Stop ();
-			// GameManager.instance = null;
-//		}
 		GameManager.instance.GameOver();
 	}
 
 	private void Restart ()
 	{
-		SceneManager.LoadScene (0);
+		SceneManager.LoadScene (1);
 	}
 
 }
