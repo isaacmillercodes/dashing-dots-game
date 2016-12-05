@@ -50,7 +50,7 @@ public class Player : MonoBehaviour {
 	{
 		movesAvailableText = GameObject.Find("MovesRemainingText").GetComponent<Text>();
 		scoreText = GameObject.Find("ScoreText").GetComponent<Text>();
-		Debug.Log (GameManager.instance.movesAvailable);
+//		Debug.Log (GameManager.instance.movesAvailable);
 		movesAvailableText.text = "Moves Remaining: " + GameManager.instance.movesAvailable;
 		scoreText.text = "Score: " + GameManager.instance.totalScore;
 
