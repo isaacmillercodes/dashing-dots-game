@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour {
 	public int totalScore = 0;
 	public int bonusMoves = 15;
 	public int level = 1;
-	public int movesPerLevel;
+	public float avgMoves = 0f;
 
 	private Text movesAvailableText;
 	private Text scoreText;
@@ -42,12 +42,13 @@ public class GameManager : MonoBehaviour {
 	}
 
 	private void OnLevelWasLoaded (int index)
-	{
+	{	
 		if (level > 1) 
-		{
+		{	
 			totalScore += ((levelScore / levelMoves) + (totalMoves / level));
 			movesAvailable += (bonusMoves / levelMoves);
 			levelMoves = 0;
+			avgMoves = Mathf.Ceil(totalMoves / (level - 1));
 		}
 		level++;
 		InitGame();
@@ -62,7 +63,7 @@ public class GameManager : MonoBehaviour {
 		{
 			instance = null;
 			Destroy (gameObject);
-			SceneManager.LoadScene (0);
+			SceneManager.LoadScene (2);
 		}
 	}
 

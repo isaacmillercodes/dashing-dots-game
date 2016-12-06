@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 	private GameObject newGameButton;
-	private GameObject menuImage;
+//	private GameObject menuImage;
 
 	// Use this for initialization
 	void Start () {
-		menuImage = GameObject.Find ("MenuBackground");
+//		menuImage = GameObject.Find ("MenuBackground");
 //		Button btn = newGameButton.GetComponent<Button>();
 		newGameButton = GameObject.Find("NewGameButton");
 
@@ -29,7 +30,7 @@ public class MainMenu : MonoBehaviour {
 
 	public void StartGame(int level)
 	{
-		Application.LoadLevel(level);
+		SceneManager.LoadScene(level);
 	}
 
 	void HideMenu () {

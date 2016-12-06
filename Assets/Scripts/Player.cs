@@ -42,13 +42,10 @@ public class Player : MonoBehaviour {
 		{
 			movesAvailableText.text = "Moves Remaining       " + GameManager.instance.movesAvailable;
 			scoreText.text = "Total Score      " + GameManager.instance.totalScore;
-			avgMovesText.text = "Average Level Moves " + GameManager.instance.movesPerLevel;
+			avgMovesText.text = "Average Level Moves " + GameManager.instance.avgMoves;
 			levelMovesText.text = "Moves This Level              " + GameManager.instance.levelMoves;
 			GameManager.instance.CheckIfGameOver();
 		}
-
-
-
 
 		lastInput = ignoreInput;
 		speed = body.velocity.magnitude;
@@ -87,7 +84,6 @@ public class Player : MonoBehaviour {
 					thisPlayer.body.constraints = RigidbodyConstraints2D.None;
 					thisPlayer.body.constraints = RigidbodyConstraints2D.FreezeRotation;
 
-
 				}
 			}
 		}
@@ -118,12 +114,8 @@ public class Player : MonoBehaviour {
 			GameManager.instance.movesAvailable--;
 			GameManager.instance.levelMoves++;
 			GameManager.instance.totalMoves++;
-			GameManager.instance.movesPerLevel = GameManager.instance.totalMoves / GameManager.instance.level;
-
-
 		}
 
-//		CheckIfGameOver ();
 		CheckSprite ();
 	}
 
@@ -161,11 +153,6 @@ public class Player : MonoBehaviour {
 			spriteRenderer.sprite = sprite1;
 		}
 	}
-
-//	private void CheckIfGameOver () {
-//		
-//		GameManager.instance.GameOver();
-//	}
 
 	private void Restart ()
 	{
