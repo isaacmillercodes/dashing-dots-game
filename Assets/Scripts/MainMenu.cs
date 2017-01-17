@@ -5,26 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 	private GameObject newGameButton;
-//	private GameObject menuImage;
 
-	// Use this for initialization
-	void Start () {
-//		menuImage = GameObject.Find ("MenuBackground");
-//		Button btn = newGameButton.GetComponent<Button>();
+	void Start () 
+	{
+		
 		newGameButton = GameObject.Find("NewGameButton");
 
 		Button newGame = newGameButton.GetComponent<Button> ();
-
-//		Debug.Log (newGameButton);
-//		Debug.Log (menuImage);
-//		Debug.Log (newGame);
-
 
 		newGame.onClick.AddListener(delegate()
 			{ 
 				StartGame(1); 
 			});
-
 
 	}
 

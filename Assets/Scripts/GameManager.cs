@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour {
 
 	public void CheckIfGameOver ()
 	{
-		if (movesAvailable <= 0)
+		if (movesAvailable == 0)
 		{
 			instance = null;
 			Destroy (gameObject);
